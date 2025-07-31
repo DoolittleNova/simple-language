@@ -120,6 +120,12 @@ public class ReachingDefs {
                 reachIn.put(nLabel, defsFromPredecessors);
 
                 // TODO: Compute reach out!
+                // REACH(out) = GEN[S] ∪ (REACH(in) - KILL[S])
+                Set<Def> inSubKillS = reachIn.get(nLabel); // REACH(in)[S]
+                inSubKillS.removeAll(kills.get(nLabel)); // REACH(in)[S] - KILL[S]
+                Set<Def> tempGen = gen.get(nLabel); // GEN[S]
+                tempGen.addAll(inSubKillS);
+                reachOut.put(nLabel, tempGen);
             }
 
         } while (!reachIn.equals(oldReachIn) || !reachOut.equals(oldReachOut));
